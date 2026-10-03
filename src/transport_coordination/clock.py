@@ -34,3 +34,24 @@ class FixedClock:
         """返回固定的 UTC 时间。"""
 
         return self._value
+
+
+class MutableClock:
+    """允许测试与离线验收在推进业务期间时调整当前时间。"""
+
+    def __init__(self, value: datetime) -> None:
+        if value.tzinfo is None:
+            raise ValueError("可变时钟必须包含时区")
+        self._value = value.astimezone(timezone.utc)
+
+    def set(self, value: datetime) -> None:
+        """把当前时间推进到新的时刻。"""
+
+        if value.tzinfo is None:
+            raise ValueError("可变时钟必须包含时区")
+        self._value = value.astimezone(timezone.utc)
+
+    def now(self) -> datetime:
+        """返回当前设定的 UTC 时间。"""
+
+        return self._value
